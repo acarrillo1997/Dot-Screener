@@ -78,11 +78,11 @@ const DotForm: React.FC<DotFormProps> = () => {
   
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
-
+  
   return (
-<form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
-      <div className="mb-4">
-        <label htmlFor="dotNumber" className="block text-sm font-medium text-gray-700">
+    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
+      <div className="flex items-center gap-4 mb-4">
+        <label htmlFor="dotNumber" className="text-sm font-medium text-gray-700">
           DOT Number
         </label>
         <input
@@ -91,40 +91,46 @@ const DotForm: React.FC<DotFormProps> = () => {
           id="dotNumber"
           value={dotNumber}
           onChange={(e) => setDotNumber(e.target.value)}
-          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+          className="flex-grow h-10 px-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           required
         />
+        <button
+          type="submit"
+          className="inline-flex items-center px-8 py-6 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-50"
+        >
+          Search DOT
+        </button>
       </div>
-      <button
-        type="submit"
-        className="w-full bg-indigo-600 text-white font-semibold text-sm px-6 py-2 rounded-md hover:bg-indigo-500"
-      >
-        Search
-      </button>
       {submitted && !companyName && (
         <div className="mt-4 text-center text-red-500">Unable to fetch company data. Please try again.</div>
       )}
       <div className="mt-4">
-       <table {...getTableProps()} className="w-full divide-y divide-gray-200 border-collapse bg-white shadow-md rounded-md border">
+        <table {...getTableProps()} className="w-full border-collapse bg-white shadow-md rounded-md border">
           <thead className="bg-gray-100">
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()} className="px-6 py-3 text-left text-lg font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-200">
+                  <th
+                    {...column.getHeaderProps()}
+                    className="px-6 py-3 text-left font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-200"
+                  >
                     {column.render('Header')}
                   </th>
                 ))}
               </tr>
             ))}
           </thead>
-          <tbody {...getTableBodyProps()} className="divide-y divide-gray-200">
+          <tbody {...getTableBodyProps()}>
             {rows.map((row) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                        <td {...cell.getCellProps()} className="px-8 py-6 whitespace-normal font-medium text-gray-900 border-b border-gray-200">
+                      <td
+                        {...cell.getCellProps()}
+                        className="px-6 py-4 font-medium text-gray-900 border-b border-gray-200"
+                      >
                         {cell.render('Cell')}
                       </td>
                     );
@@ -137,6 +143,10 @@ const DotForm: React.FC<DotFormProps> = () => {
       </div>
     </form>
   );
+  
+  
+  
+  
 };
 
 export default DotForm;

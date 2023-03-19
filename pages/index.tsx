@@ -1,32 +1,35 @@
+import React from 'react';
 import Head from 'next/head';
 import DotForm from '../components/dotform';
 
 const Home: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
       <Head>
         <title>DOT Lookup</title>
         <meta name="description" content="A simple DOT lookup tool" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="w-full max-w-4xl mx-auto p-8">
-        <div className="w-full bg-white dark:bg-gray-800 shadow-md overflow-hidden md:rounded-xl">
-          <div className="flex items-center justify-center md:flex-row h-screen">
-            <div className="md:w-1/2">
-              <img
-                className="h-48 w-full object-cover md:h-full md:w-full mx-auto"
-                src="/images/truck1.jpg"
-                alt="Truck"
-              />
-            </div>
-            <div className="md:w-1/2 p-8">
-              <h1 className="text-3xl font-bold text-center md:text-left mb-6">DOT Lookup</h1>
-              <DotForm />
-            </div>
+      <main className="w-full max-w-5xl flex-1">
+        <div className="bg-white shadow-md rounded-md overflow-hidden md:flex md:flex-row md:h-screen">
+          <div className="md:w-1/2 md:h-full">
+            <img
+              className="h-48 w-full object-cover md:h-full md:w-full mx-auto"
+              src="/images/truck1.jpg"
+              alt="Truck"
+            />
+          </div>
+          <div className="md:w-1/2 p-8 flex flex-col justify-center">
+            <h1 className="text-9xl font-bold text-center md:text-center mb-6">DOT Lookup</h1>
+            <DotForm />
           </div>
         </div>
       </main>
+
+      <footer className="w-full max-w-5xl text-center py-4">
+        <p className="text-gray-500 text-sm">&copy; 2023 Arnaldo, Inc. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
