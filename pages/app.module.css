@@ -1,0 +1,22 @@
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f3f3f3;
+  }
+  
+  .title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1a202c;
+  }
+  
+  .logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+  }
+  

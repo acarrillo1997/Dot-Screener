@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
 import { useTable, Column } from 'react-table';
+import styles from './dotform.module.css';
 
 
 interface DotFormProps {}
@@ -11,6 +12,7 @@ const DotForm: React.FC<DotFormProps> = () => {
   const [companyName, setCompanyName] = useState<string | null>(null);
   const [operationType, setOperationType] = useState<string | null>(null);
   const [operatingStatus, setOperatingStatus] = useState<string | null>(null);
+  const [driverOOS, setdriverOOS] = useState<string | null>('');
 
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -37,11 +39,18 @@ const DotForm: React.FC<DotFormProps> = () => {
           console.error('Error: Invalid operating status data');
         }
   
+        if (carrier.driverOosRate !== null && carrier.driverOosRate !== undefined) {
+          setdriverOOS(`${carrier.driverOosRate}`);
+        } else {
+          console.error('Error: Invalid driverOOS data');
+        }             
+
         if (carrier.carrierOperation) {
           setOperationType(carrier.carrierOperation.carrierOperationDesc);
         } else {
           console.error('Error: Invalid operation type data');
         }
+
       } else {
         console.error('Error: Invalid carrier data');
       }
@@ -56,9 +65,10 @@ const DotForm: React.FC<DotFormProps> = () => {
         companyName: companyName,
         operatingStatus: operatingStatus,
         operationType: operationType,
+        driverOOS: driverOOS,
       },
     ],
-    [companyName, operatingStatus, operationType]
+    [companyName, operatingStatus, operationType, driverOOS]
   );
 
   const columns = React.useMemo<Column<object>[]>(() => [
@@ -74,79 +84,82 @@ const DotForm: React.FC<DotFormProps> = () => {
       Header: 'Operation Type',
       accessor: 'operationType',
     },
+    {
+      Header: 'Driver OOS',
+      accessor: 'driverOOS',
+    },
   ], []);
   
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
   
+
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
-      <div className="flex items-center gap-4 mb-4">
-        <label htmlFor="dotNumber" className="text-sm font-medium text-gray-700">
-          DOT Number
-        </label>
-        <input
-          type="text"
-          name="dotNumber"
-          id="dotNumber"
-          value={dotNumber}
-          onChange={(e) => setDotNumber(e.target.value)}
-          className="flex-grow h-10 px-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-          required
-        />
-        <button
-          type="submit"
-          className="inline-flex items-center px-8 py-6 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-200 disabled:opacity-50"
-        >
-          Search DOT
-        </button>
-      </div>
-      {submitted && !companyName && (
-        <div className="mt-4 text-center text-red-500">Unable to fetch company data. Please try again.</div>
-      )}
-      <div className="mt-4">
-        <table {...getTableProps()} className="w-full border-collapse bg-white shadow-md rounded-md border">
-          <thead className="bg-gray-100">
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    className="px-6 py-3 text-left font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-200"
-                  >
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        className="px-6 py-4 font-medium text-gray-900 border-b border-gray-200"
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    );
-                  })}
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className="flex items-center gap-4 mb-4">
+          <label htmlFor="dotNumber" className="text-sm font-medium" style={{ color: 'black' }}>
+            Insert DOT Number to Search:
+          </label>
+          <input
+            type="text"
+            name="dotNumber"
+            id="dotNumber"
+            value={dotNumber}
+            onChange={(e) => setDotNumber(e.target.value)}
+            className={`${styles.input} transition-all duration-200 ease-in-out focus:outline-none focus:shadow-outline focus:border-blue-300`}
+            required
+          />
+          <button
+            type="submit"
+            className={`${styles.button} transition-all duration-200 ease-in-out focus:outline-none focus:shadow-outline`}
+          >
+            Search DOT
+          </button>
+        </div>
+        {submitted && !companyName && (
+          <div className={styles.error}>Unable to fetch company data. Please try again.</div>
+        )}
+        <div className="mt-4">
+          <table {...getTableProps()} className={styles.table}>
+            <thead className="bg-gray-100">
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th
+                      {...column.getHeaderProps()}
+                      className="px-6 py-3 text-left font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-200"
+                    >
+                      {column.render('Header')}
+                    </th>
+                  ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </form>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td
+                          {...cell.getCellProps()}
+                          className="px-6 py-4 font-medium text-gray-900 border-b border-gray-200"
+                        >
+                          {cell.render('Cell')}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
   );
-  
-  
-  
-  
 };
 
 export default DotForm;
