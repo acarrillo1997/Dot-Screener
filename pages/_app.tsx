@@ -1,9 +1,18 @@
-import '<arnaldo_personal>/styles/globals.css'
-import type { AppProps } from 'next/app'
-import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
+import ClientOnly from '<arnaldo_personal>/components/clientOnly';
+const BrowserRouter = dynamic(() => import('react-router-dom').then((mod) => mod.BrowserRouter), {
+  ssr: false,
+});
 
-
-
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <ClientOnly>
+      <BrowserRouter>
+        <Component {...pageProps} />
+      </BrowserRouter>
+    </ClientOnly>
+  );
 }
+
+export default MyApp;
